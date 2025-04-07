@@ -2,7 +2,7 @@
 
 import core.AbstractGraphObject;
 import gui.Toolbar;
-import Shapes.*;
+import shapes.*;
 import gui.DrawPanel;
 
 import javax.swing.*;
