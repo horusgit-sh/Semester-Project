@@ -13,11 +13,11 @@ public class Kruznice extends AbstractGraphObject {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(barva);
-        if (filled) {
-            g.fillRect(pozice.x, pozice.y, polomer, polomer);
-        } else {
-            g.drawRect(pozice.x, pozice.y, polomer, polomer);
-        }
+        int x = pozice.x - polomer;
+        int y = pozice.y - polomer;
+
+        g.fillOval(x, y, polomer * 2, polomer * 2);
+
     }
     @Override
     public boolean obsahuje(int x, int y) {

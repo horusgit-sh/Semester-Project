@@ -1,5 +1,6 @@
 package gui;
 
+import shapes.*;
 import core.AbstractGraphObject;
 
 import javax.swing.*;
@@ -7,38 +8,44 @@ import java.awt.*;
 import java.util.List;
 
 public class Toolbar extends JPanel {
+    public Toolbar(List<AbstractGraphObject> objects, DrawPanel drawPanel) {
+        setLayout(new FlowLayout(FlowLayout.LEFT));
 
-    private DrawPanel drawPanel;
-    private List<AbstractGraphObject> objekty;
+        JButton circleBtn = new JButton("Kruh");
+        JButton squareBtn = new JButton("Čtverec");
+        JButton triangleBtn = new JButton("Trojúhelník");
+        JButton rectBtn = new JButton("Obdélník");
+        JButton clearBtn = new JButton("Vymazat");
 
-    private JButton toggleStyleButton;
-    private boolean currentStyleFilled = true;
-
-    public Toolbar(DrawPanel drawPanel, List<AbstractGraphObject> objekty) {
-        this.drawPanel = drawPanel;
-        this.objekty = objekty;
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        toggleStyleButton = new JButton("Contour");
-
-        Dimension buttonSize = new Dimension(90, 30);
-        toggleStyleButton.setMaximumSize(buttonSize);
-        toggleStyleButton.setPreferredSize(buttonSize);
-        toggleStyleButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        toggleStyleButton.addActionListener(e -> {
-            currentStyleFilled = !currentStyleFilled;
-
-            for (AbstractGraphObject obj : objekty) {
-                obj.setFilled(currentStyleFilled);
-            }
-
-            toggleStyleButton.setText(currentStyleFilled ? "Contour" : "Fill");
+        circleBtn.addActionListener(e -> {
+            objects.add(new Kruznice(new Point(100, 100), Color.BLUE, 50));
             drawPanel.repaint();
         });
 
-        add(Box.createVerticalStrut(10));
-        add(toggleStyleButton);
+        squareBtn.addActionListener(e -> {
+            objects.add(new Ctverec(new Point(200, 100), Color.RED, 60));
+            drawPanel.repaint();
+        });
+
+        triangleBtn.addActionListener(e -> {
+            objects.add(new Trojuhelnik(new Point(300, 150), Color.ORANGE, 100));
+            drawPanel.repaint();
+        });
+
+        rectBtn.addActionListener(e -> {
+            objects.add(new Obdelnik(new Point(400, 200), Color.GREEN, 120, 60));
+            drawPanel.repaint();
+        });
+
+        clearBtn.addActionListener(e -> {
+            objects.clear();
+            drawPanel.repaint();
+        });
+
+        add(circleBtn);
+        add(squareBtn);
+        add(triangleBtn);
+        add(rectBtn);
+        add(clearBtn);
     }
 }

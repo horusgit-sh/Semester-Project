@@ -28,13 +28,6 @@ public abstract class AbstractGraphObject {
         this.barva = barva;
     }
 
-    public boolean isFilled() {
-        return filled;
-    }
-
-    public void setFilled(boolean filled) {
-        this.filled = filled;
-    }
 
     public abstract void draw(Graphics2D g);
     public abstract boolean obsahuje(int x, int y);

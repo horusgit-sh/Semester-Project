@@ -1,75 +1,77 @@
 package gui;
-
+import core.AbstractGraphObject;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 import core.AbstractGraphObject;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.List;
 
+
 public class DrawPanel extends JPanel {
-
-    private List<AbstractGraphObject> objekty;
+    List<AbstractGraphObject> objectList;
     private AbstractGraphObject selectedObject = null;
-    private Point lastDragPoint = null;
+    private Point lastMousePosition;
 
-    public DrawPanel(List<AbstractGraphObject> objekty) {
-        this.objekty = objekty;
+    public DrawPanel(List<AbstractGraphObject> objectList) {
+        this.objectList = objectList;
         setBackground(Color.LIGHT_GRAY);
-        initMouseListener();
-    }
 
-    private void initMouseListener() {
-        addMouseListener(new MouseAdapter() {
+
+        MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                selectedObject = getObjectAt(e.getPoint());
-                lastDragPoint = e.getPoint();
+                Point clickPoint = e.getPoint();
+                for (int i = objectList.size() - 1; i >= 0; i--) { // от верхней фигуры
+                    AbstractGraphObject obj = objectList.get(i);
+                    if (obj.obsahuje(clickPoint.x, clickPoint.y)) {
+                        selectedObject = obj;
+                        lastMousePosition = clickPoint;
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (selectedObject != null && lastMousePosition != null) {
+                    Point current = e.getPoint();
+                    int dx = current.x - lastMousePosition.x;
+                    int dy = current.y - lastMousePosition.y;
+
+                    Point newPosition = new Point(
+                            selectedObject.getPozice().x + dx,
+                            selectedObject.getPozice().y + dy
+                    );
+                    selectedObject.setPozice(newPosition);
+                    lastMousePosition = current;
+                    repaint();
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 selectedObject = null;
-                lastDragPoint = null;
+                lastMousePosition = null;
             }
-        });
+        };
 
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (selectedObject != null) {
-                    int dx = e.getX() - lastDragPoint.x;
-                    int dy = e.getY() - lastDragPoint.y;
-
-                    Point newPozice = new Point(selectedObject.getPozice().x + dx, selectedObject.getPozice().y + dy);
-                    selectedObject.setPozice(newPozice);
-
-                    lastDragPoint = e.getPoint();
-
-                    repaint();
-                }
-            }
-        });
-    }
-
-    private AbstractGraphObject getObjectAt(Point point) {
-        for (AbstractGraphObject obj : objekty) {
-            if (obj.obsahuje(point.x, point.y)) {
-                return obj;
-            }
-        }
-        return null;
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Graphics2D g2d = (Graphics2D) g;
-
-        for (AbstractGraphObject obj : objekty) {
-            obj.draw(g2d);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2f));
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        for (AbstractGraphObject obj : objectList) {
+            obj.draw(g2);
         }
     }
 }

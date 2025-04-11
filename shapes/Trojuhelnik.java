@@ -28,11 +28,8 @@ public class Trojuhelnik extends AbstractGraphObject {
         };
 
         g.setColor(barva);
-        if (filled) {
-            g.fillPolygon(xPoints, yPoints, 3);
-        } else {
-            g.drawPolygon(xPoints, yPoints, 3);
-        }
+        g.fillPolygon(xPoints, yPoints, 3);
+
     }
 
     @Override

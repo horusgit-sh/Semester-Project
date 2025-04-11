@@ -14,11 +14,7 @@ public class Ctverec extends AbstractGraphObject {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(barva);
-        if (filled) {
-            g.fillRect(pozice.x, pozice.y, velikost, velikost);
-        } else {
-            g.drawRect(pozice.x, pozice.y, velikost, velikost);
-        }
+        g.fillRect(pozice.x, pozice.y, velikost, velikost);
     }
 
     @Override

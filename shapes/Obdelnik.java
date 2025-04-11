@@ -15,11 +15,7 @@ public class Obdelnik extends AbstractGraphObject {
     @Override
     public void draw(Graphics2D g) {
         g.setColor(barva);
-        if (filled) {
-            g.fillRect(pozice.x, pozice.y, sirka, vyska);
-        } else {
-            g.drawRect(pozice.x, pozice.y, sirka, vyska);
-        }
+        g.fillRect(pozice.x, pozice.y, sirka, vyska);
     }
 
     @Override
